@@ -1,2 +1,24 @@
-# BT-risk-assessment
-This repo is for the paper: Using behavior trees in risk assessment
+# README #
+
+
+# Using Behavior Trees in Risk Assessment Data
+
+### What is this repository for? ###
+
+This online Appendix is for the paper: Using Behavior Trees in Risk Assessment: An Experience Report.
+
+## Folder Structure: ##
+
+
+```bash
+main
+│
+├───BTCPP-pick&place (contains the Volvo Group Pick&Place mission created in Groot with the outputs from the FMEA annotated.)
+│	├──pick_place_robot.xml (The file uses the XML-like language of BehaviorTree.CPP to express the pick&place mission.)
+├───FMEA-results (contains the applied risk assessment results)
+│ ├──Risk_Assment_BT.xlsx (The file contains the outputs of process-FMEA for the pick&place mission.)
+└───img (figures for the pick&place mission extracted from Groot)
+```
+
+### Who do I talk to? ###
+It will be filled out after review.
