@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4"
+      main_tree_to_execute="main">
+  <BehaviorTree ID="Attach">
+    <Sequence>
+      <BehaviorTreeAction name="MoveJ"
+                          action_name="bt_action_service"
+                          command=""/>
+      <BehaviorTreeAction name="connect_robotiq_gripper"
+                          action_name="bt_action_service"
+                          command=""/>
+      <BehaviorTreeAction name="MoveL"
+                          action_name="bt_action_service"
+                          command=""/>
+      <BehaviorTreeAction name="MoveL"
+                          action_name="bt_action_service"
+                          command=""/>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="Pick&amp;Place">
+    <Sequence>
+      <BehaviorTreeAction name="MoveToAboveA"
+                          action_name="bt_action_service"
+                          command="robot_movej_A"
+                          _description="The potential effect of failures is human or non-human object injured and process delay: Causes for Robot Collide: MoveOutsideWorkArea or OperatorOnTheWay&#10;Detect MoveOutsideWorkArea: Checking the input moving position againt expected robot workspace and Operator detect failures, prevent by constraint on robot work space&#10;Detect OperatorOnTheWay: Operator detect failures and setting collision force threshold&#10;Remmber to set the collision force threshold - if exceded robot will stop&#10;If collision happens then the severity is 9&#10;"
+                          _failureIf="MoveOutsideWorkArea(robot): detection using the input moving position againt expected robot workspace ;OperatorOnTheWay(operator): detection using the force/torque sensor"
+                          _onFailure="StopTheRobot;&#10;NotifyHuman"/>
+      <BehaviorTreeAction name="scan"
+                          action_name="bt_action_service"
+                          command="scan"
+                          _description="The potential effect of failures is process delay: WrongScan and NoScan &#10;Potential causes of WrongScan: 1. starting position of scanning is wrong; 2. wrong trolley; 3. wrong positions are calculated from the scanning&#10;Potential causes of NoScan is: the algorithm is faulty &#10;"
+                          _successIf="BlueBoxPositionCorrect &amp; PartDetected &amp; PartScannedCorrectly "
+                          _failureIf="WrongScan;&#10;NoScan&#10;"
+                          _onFailure="if BlueBoxPositionNotCorrect: if available TryAnotherPoistion, or  OperatorNotified&#10;if PartNotDetected: OperatorNotified"/>
+      <BehaviorTreeAction name="Pick"
+                          action_name="bt_action_service"
+                          command="pick"
+                          _description="Potential effect of failuer is process delay: notPartPicked or PickedAndDropped&#10;Remmber to enable the force/torque sensor to detect if part is in the gripper&#10;Causes of PartNotPicked and PartDropped: 2.Scanning input not correct; 3.grasping point not accurate; 4.gripper performance deteriorated&#10;&#10;Another cause for only PartNotPicked: 1.Robot moves outside its expected zone Prevent by constraint on robot work space; "
+                          _successIf="PartPicked"
+                          _failureIf="PartNotPicked: to detect enable the force/torque sensor if part is in the gripper;PartDropped: to detect enable the force/torque sensor if part is in the gripper&#10;"
+                          _onFailure="(after # attempts) stopp execution and NotifyOperator"/>
+      <BehaviorTreeAction name="MoveToB"
+                          action_name="bt_action_service"
+                          command="robot_movej_A"
+                          _description="The potential effect of failures is human or non-human object injured and process delay: Causes for Robot Collide: MoveOutsideWorkArea or OperatorOnTheWay&#10;Detect MoveOutsideWorkArea: Checking the input moving position againt expected robot workspace and Operator detect failures, prevent by constraint on robot work space&#10;Detect OperatorOnTheWay: Operator detect failures and setting collision force threshold&#10;Remmber to set the collision force threshold - if exceded robot will stop&#10;If collision happens then the severity is 9&#10;"
+                          _failureIf="MoveOutsideWorkArea(robot): detection using the input moving position againt expected robot workspace ;OperatorOnTheWay(operator): detection using the force/torque sensor"
+                          _onFailure="StopTheRobot;&#10;NotifyHuman"/>
+      <BehaviorTreeAction name="Place"
+                          action_name="bt_action_service"
+                          command="place"
+                          _description="Potential effect of failuer is process delay: PlacedOutsideBox and PlacedWrongPositionInsideBox and PartDropped&#10;Potential effect of failuer is object dameged:PlacedOutsideBox and  PartDropped&#10;Potential effect of failuer is human injured: PlacedOutsideBox and  PartDropped&#10;Potential causes of PlacedOutsideBox: trolly is not in the right place&#10;Potential causes of PlacedWrongPositionInsideBox: 1. position provided by the ctrl system is wrong; 2. trolly is not in the right place&#10;Potential causes of PartDropped: 1. gripper performance deteriorated; 2. grasping point not accurate&#10;Remmber to enable the force/torque sensor to detect if part is in the gripper"
+                          _successIf="PartInGripper; PartPlacedCorrectly"
+                          _failureIf="PartNotPlacedCorrectly(PlacedOutsideBox;PlacedWrongPositionInsideBox): only detected if operator in the process&#10;PartDropped: to detect enable the force/torque sensor if part is in the gripper"
+                          _onFailure="NotifyOperator"/>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="main">
+    <Fallback>
+      <Sequence name="Attach">
+        <ScriptCondition name="GripperNotAttached?"
+                         code=""/>
+        <SubTree ID="Attach"
+                 _autoremap="false"/>
+      </Sequence>
+      <Sequence name="Pick&amp;Place">
+        <SubTree ID="Pick&amp;Place"/>
+      </Sequence>
+    </Fallback>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="BehaviorTreeAction"
+            editable="true">
+      <input_port name="action_name"/>
+      <input_port name="command"/>
+    </Action>
+  </TreeNodesModel>
+
+</root>
