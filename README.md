@@ -5,7 +5,7 @@
 
 ### What is this repository for? ###
 
-This online Appendix is for the paper: Using Behavior Trees in Risk Assessment: An Experience Report.
+This online Appendix is for the paper: Using Behavior Trees in Risk Assessment.
 
 ## Folder Structure: ##
 
