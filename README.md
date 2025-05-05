@@ -5,7 +5,7 @@
 
 ### What is this repository for? ###
 
-This online Appendix is for the paper: Using Behavior Trees in Risk Assessment: An Experience Report.
+This online Appendix is for the paper: Using Behavior Trees in Risk Assessment.
 
 ## Folder Structure: ##
 
@@ -27,4 +27,4 @@ The figure shows the pick&place mission in Groot after integrating the outputs f
 ![Alt text](img/BT_mission_annotated_Groot.jpg)
 
 ### Who do I talk to? ###
-It will be filled out after review.
+Razan Ghzouli(razan.ghzouli@chalmers.se)
